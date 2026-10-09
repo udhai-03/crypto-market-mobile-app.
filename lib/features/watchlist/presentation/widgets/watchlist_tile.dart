@@ -9,7 +9,9 @@ import 'package:crypto_market_mobile/core/widgets/skeleton_box.dart';
 import 'package:crypto_market_mobile/features/coin_details/presentation/models/coin_ticker_state.dart';
 import 'package:crypto_market_mobile/features/coin_details/presentation/viewmodels/coin_details_view_model.dart';
 import 'package:crypto_market_mobile/features/market/data/market_symbols.dart';
+import 'package:crypto_market_mobile/features/market/presentation/widgets/coin_avatar.dart';
 import 'package:crypto_market_mobile/features/market/presentation/widgets/market_ticker_tile.dart';
+import 'package:crypto_market_mobile/features/market/presentation/widgets/pair_symbol_text.dart';
 import 'package:crypto_market_mobile/features/watchlist/presentation/widgets/watchlist_toggle_button.dart';
 
 /// One saved pair with its latest ticker from the shared market state.
@@ -71,8 +73,8 @@ class _WatchlistStatusTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Card(
-      clipBehavior: Clip.antiAlias,
+    return Material(
+      type: MaterialType.transparency,
       child: Row(
         children: [
           Expanded(
@@ -87,36 +89,37 @@ class _WatchlistStatusTile extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(
                       AppSpacing.medium,
-                      AppSpacing.medium,
-                      AppSpacing.xSmall,
-                      AppSpacing.medium,
+                      AppSpacing.medium - 2,
+                      0,
+                      AppSpacing.medium - 2,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
-                        Text(
-                          symbol,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
+                        CoinAvatar(symbol: symbol),
+                        const SizedBox(width: AppSpacing.medium - 4),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              PairSymbolText(symbol: symbol),
+                              const SizedBox(height: AppSpacing.xSmall),
+                              if (isLoading)
+                                const SkeletonBox(
+                                  height: _skeletonHeight,
+                                  width: _skeletonWidth,
+                                )
+                              else
+                                Text(
+                                  status,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: AppSpacing.xSmall),
-                        if (isLoading)
-                          const SkeletonBox(
-                            height: _skeletonHeight,
-                            width: _skeletonWidth,
-                          )
-                        else
-                          Text(
-                            status,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ),
                       ],
                     ),
                   ),

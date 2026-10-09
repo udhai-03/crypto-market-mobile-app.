@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:crypto_market_mobile/core/constants/app_spacing.dart';
 import 'package:crypto_market_mobile/features/coin_details/presentation/widgets/coin_chart_section.dart';
 import 'package:crypto_market_mobile/features/coin_details/presentation/widgets/coin_details_back_button.dart';
+import 'package:crypto_market_mobile/features/coin_details/presentation/widgets/coin_identity_header.dart';
 import 'package:crypto_market_mobile/features/coin_details/presentation/widgets/coin_market_stats.dart';
 import 'package:crypto_market_mobile/features/coin_details/presentation/widgets/coin_price_summary.dart';
 import 'package:crypto_market_mobile/features/market/domain/models/trading_pair.dart';
@@ -40,6 +41,8 @@ class CoinDetailsScreen extends StatelessWidget {
             AppSpacing.screen,
           ),
           children: [
+            CoinIdentityHeader(symbol: symbol),
+            const SizedBox(height: AppSpacing.medium),
             CoinPriceSummary(symbol: symbol),
             const SizedBox(height: AppSpacing.screen),
             CoinChartSection(symbol: symbol),

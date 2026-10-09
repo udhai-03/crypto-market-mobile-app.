@@ -9,6 +9,8 @@ class MarketSummary {
     required this.losersCount,
     required this.averageChangePercent,
     this.topVolumeTicker,
+    this.topGainer,
+    this.topLoser,
   });
 
   factory MarketSummary.fromTickers(List<MarketTicker> tickers) {
@@ -18,14 +20,23 @@ class MarketSummary {
     var losers = 0;
     var changeSum = 0.0;
     var topVolume = tickers.first;
+    MarketTicker? topGainer;
+    MarketTicker? topLoser;
 
     for (final ticker in tickers) {
-      if (ticker.priceChangePercent > 0) {
+      final change = ticker.priceChangePercent;
+      if (change > 0) {
         gainers++;
-      } else if (ticker.priceChangePercent < 0) {
+        if (topGainer == null || change > topGainer.priceChangePercent) {
+          topGainer = ticker;
+        }
+      } else if (change < 0) {
         losers++;
+        if (topLoser == null || change < topLoser.priceChangePercent) {
+          topLoser = ticker;
+        }
       }
-      changeSum += ticker.priceChangePercent;
+      changeSum += change;
       if (ticker.quoteVolume > topVolume.quoteVolume) topVolume = ticker;
     }
 
@@ -35,6 +46,8 @@ class MarketSummary {
       losersCount: losers,
       averageChangePercent: changeSum / tickers.length,
       topVolumeTicker: topVolume,
+      topGainer: topGainer,
+      topLoser: topLoser,
     );
   }
 
@@ -54,4 +67,10 @@ class MarketSummary {
 
   /// Pair with the highest 24h volume in its quote asset (USDT).
   final MarketTicker? topVolumeTicker;
+
+  /// Pair with the largest 24h rise; null when nothing rose.
+  final MarketTicker? topGainer;
+
+  /// Pair with the largest 24h fall; null when nothing fell.
+  final MarketTicker? topLoser;
 }

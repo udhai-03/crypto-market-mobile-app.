@@ -5,44 +5,52 @@ import 'package:crypto_market_mobile/core/constants/app_spacing.dart';
 import 'package:crypto_market_mobile/core/utils/number_formatters.dart';
 import 'package:crypto_market_mobile/features/market/presentation/models/price_trend.dart';
 
-/// Signed percentage with an arrow, so the trend is not conveyed by color only.
+/// Signed percentage badge with an up/down arrow and clear color-coded pill.
 class PriceChangeBadge extends StatelessWidget {
   const PriceChangeBadge({super.key, required this.percent});
 
   final double percent;
 
-  static const double _backgroundAlpha = 0.14;
-  static const double _iconSize = 18;
+  static const double _tintAlpha = 0.15;
+  static const double _borderAlpha = 0.32;
+  static const double _iconSize = 16;
 
   @override
   Widget build(BuildContext context) {
     final trend = PriceTrend.fromChange(percent);
+    final theme = Theme.of(context);
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: trend.color.withValues(alpha: _backgroundAlpha),
-        borderRadius: BorderRadius.circular(AppRadius.badge),
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.small,
+        vertical: 3,
       ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          AppSpacing.xSmall,
-          AppSpacing.xSmall / 2,
-          AppSpacing.small,
-          AppSpacing.xSmall / 2,
+      decoration: BoxDecoration(
+        color: trend == PriceTrend.flat
+            ? Colors.white.withValues(alpha: 0.06)
+            : trend.color.withValues(alpha: _tintAlpha),
+        borderRadius: BorderRadius.circular(AppRadius.badge + 2),
+        border: Border.all(
+          color: trend == PriceTrend.flat
+              ? Colors.white.withValues(alpha: 0.15)
+              : trend.color.withValues(alpha: _borderAlpha),
+          width: 1.0,
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(trend.icon, size: _iconSize, color: trend.color),
-            Text(
-              NumberFormatters.percentChange(percent),
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: trend.color,
-                fontFeatures: const [FontFeature.tabularFigures()],
-              ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(trend.icon, size: _iconSize, color: trend.color),
+          const SizedBox(width: 2),
+          Text(
+            NumberFormatters.percentChange(percent),
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: trend.color,
+              fontWeight: FontWeight.w700,
+              fontFeatures: const [FontFeature.tabularFigures()],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

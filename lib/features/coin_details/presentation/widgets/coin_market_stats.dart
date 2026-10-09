@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:crypto_market_mobile/app/theme/app_colors.dart';
 import 'package:crypto_market_mobile/core/constants/app_spacing.dart';
 import 'package:crypto_market_mobile/core/constants/app_strings.dart';
 import 'package:crypto_market_mobile/core/utils/number_formatters.dart';
 import 'package:crypto_market_mobile/features/coin_details/presentation/models/coin_ticker_state.dart';
 import 'package:crypto_market_mobile/features/coin_details/presentation/viewmodels/coin_details_view_model.dart';
 import 'package:crypto_market_mobile/features/market/domain/models/trading_pair.dart';
+import 'package:crypto_market_mobile/features/market/presentation/models/coin_identity.dart';
 import 'package:crypto_market_mobile/features/market/presentation/models/price_trend.dart';
 import 'package:crypto_market_mobile/features/market/presentation/widgets/market_stat_card.dart';
 
@@ -33,10 +35,14 @@ class CoinMarketStats extends ConsumerWidget {
       MarketStatCard(
         label: AppStrings.statHigh24h,
         value: NumberFormatters.price(ticker.highPrice),
+        icon: Icons.north_east_rounded,
+        accentColor: PriceTrend.up.color,
       ),
       MarketStatCard(
         label: AppStrings.statLow24h,
         value: NumberFormatters.price(ticker.lowPrice),
+        icon: Icons.south_east_rounded,
+        accentColor: PriceTrend.down.color,
       ),
       MarketStatCard(
         label: AppStrings.statChange24h,
@@ -44,16 +50,20 @@ class CoinMarketStats extends ConsumerWidget {
           ticker.priceChange,
           precisionOf: ticker.lastPrice,
         ),
-        icon: trend.icon,
+        icon: trend.trendIcon,
         valueColor: trend.color,
       ),
       MarketStatCard(
         label: AppStrings.volumeIn(pair.base),
         value: NumberFormatters.compactNumber(ticker.volume),
+        icon: Icons.toll_outlined,
+        accentColor: CoinIdentity.forSymbol(ticker.symbol).color,
       ),
       MarketStatCard(
         label: AppStrings.volumeIn(pair.quote),
         value: NumberFormatters.compactNumber(ticker.quoteVolume),
+        icon: Icons.payments_outlined,
+        accentColor: AppColors.secondary,
       ),
     ];
 

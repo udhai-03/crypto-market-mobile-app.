@@ -20,7 +20,12 @@ class MarketHeader extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.all(AppSpacing.medium),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.medium,
+        AppSpacing.screen,
+        AppSpacing.medium,
+        AppSpacing.medium,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -34,8 +39,9 @@ class MarketHeader extends StatelessWidget {
                 header: true,
                 child: Text(
                   title,
-                  style: theme.textTheme.headlineSmall?.copyWith(
+                  style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.w700,
+                    letterSpacing: -0.8,
                   ),
                 ),
               ),

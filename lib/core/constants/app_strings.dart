@@ -84,16 +84,17 @@ abstract final class AppStrings {
   static String liveStatusSemantics(String status) =>
       'Live price updates: $status';
 
-  static const summaryTitle = 'Tracked pairs overview';
-  static const summaryCaption =
-      'Derived from the Binance pairs tracked in this app · last 24h';
-  static const statTrackedPairs = 'Tracked pairs';
+  static const summaryTitle = 'Market pulse';
+  static const summaryCaption = 'Tracked Binance pairs · last 24h';
+  static const statTrackedPairs = 'Pairs';
   static const statGainers = 'Gainers';
   static const statLosers = 'Losers';
-  static const statAverageChange = 'Simple avg 24h change';
-  static const statTopVolume = 'Highest 24h quote volume';
+  static const statAverageChange = 'Average 24h change';
+  static const statTopGainer = 'Top gainer';
+  static const statTopLoser = 'Top loser';
+  static const statTopVolume = 'Top volume';
 
-  static const searchHint = 'Search by symbol, e.g. BTC';
+  static const searchHint = 'Search coins, e.g. BTC';
   static const clearSearch = 'Clear search';
 
   static const filterAll = 'All';
@@ -110,6 +111,7 @@ abstract final class AppStrings {
 
   static const change24hLabel = '24h';
   static const volumeLabel = '24h vol';
+  static String shortVolume(String amount) => 'Vol $amount';
   static String amountIn(String amount, String asset) =>
       asset.isEmpty ? amount : '$amount $asset';
 

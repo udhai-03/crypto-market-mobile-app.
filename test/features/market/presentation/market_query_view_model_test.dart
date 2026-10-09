@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:crypto_market_mobile/features/market/presentation/models/market_query.dart';
+import 'package:crypto_market_mobile/features/market/presentation/models/market_summary.dart';
 import 'package:crypto_market_mobile/features/market/presentation/viewmodels/market_query_view_model.dart';
 import 'package:crypto_market_mobile/features/market/presentation/viewmodels/market_selectors.dart';
 import 'package:crypto_market_mobile/features/market/presentation/viewmodels/market_view_model.dart';
@@ -180,5 +181,16 @@ void main() {
     expect(summary.losersCount, 2);
     expect(summary.averageChangePercent, closeTo(-0.56, 1e-9));
     expect(summary.topVolumeTicker?.symbol, 'BTCUSDT');
+    expect(summary.topGainer?.symbol, 'ADAUSDT');
+    expect(summary.topLoser?.symbol, 'BNBUSDT');
+  });
+
+  test('summary has no top gainer or loser when nothing moved', () {
+    final summary = MarketSummary.fromTickers([
+      buildTicker(priceChangePercent: 0),
+    ]);
+
+    expect(summary.topGainer, isNull);
+    expect(summary.topLoser, isNull);
   });
 }

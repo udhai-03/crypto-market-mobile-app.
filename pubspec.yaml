@@ -63,6 +63,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # Coin logos from spothq/cryptocurrency-icons (CC0 1.0).
+  assets:
+    - assets/coins/
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
