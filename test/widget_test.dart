@@ -14,8 +14,8 @@ import 'package:crypto_market_mobile/features/market/domain/models/market_ticker
 import 'package:crypto_market_mobile/features/market/presentation/models/market_query.dart';
 import 'package:crypto_market_mobile/features/market/presentation/widgets/live_status_indicator.dart';
 import 'package:crypto_market_mobile/features/market/presentation/widgets/market_controls.dart';
-import 'package:crypto_market_mobile/features/market/presentation/widgets/market_stat_card.dart';
 import 'package:crypto_market_mobile/features/market/presentation/widgets/market_state_views.dart';
+import 'package:crypto_market_mobile/features/market/presentation/widgets/market_summary_section.dart';
 import 'package:crypto_market_mobile/features/market/presentation/widgets/market_ticker_tile.dart';
 import 'package:crypto_market_mobile/features/market/providers/market_providers.dart';
 import 'package:crypto_market_mobile/features/watchlist/providers/watchlist_providers.dart';
@@ -90,7 +90,13 @@ void main() {
     expect(tileFor('BTCUSDT'), findsOneWidget);
     expect(find.text(r'$80,600.01'), findsOneWidget);
     expect(find.text('-3.30%'), findsOneWidget);
-    expect(find.text('24h vol 1.71B USDT'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: tileFor('BTCUSDT'),
+        matching: find.text(AppStrings.shortVolume('1.71B')),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('summary statistics describe only the tracked pairs', (
@@ -101,7 +107,7 @@ void main() {
     void expectStat(String label, String value) {
       expect(
         find.descendant(
-          of: find.widgetWithText(MarketStatCard, label),
+          of: find.widgetWithText(MarketMetric, label),
           matching: find.text(value),
         ),
         findsOneWidget,
@@ -115,7 +121,11 @@ void main() {
     expectStat(AppStrings.statGainers, '2');
     expectStat(AppStrings.statLosers, '2');
     expectStat(AppStrings.statAverageChange, '-0.56%');
-    expectStat(AppStrings.statTopVolume, 'BTCUSDT');
+    expectStat(AppStrings.statTopVolume, 'BTC');
+    expectStat(AppStrings.statTopGainer, 'ADA');
+    expectStat(AppStrings.statTopGainer, '+4.80%');
+    expectStat(AppStrings.statTopLoser, 'BNB');
+    expectStat(AppStrings.statTopLoser, '-6.40%');
     expectStat(AppStrings.statTopVolume, '1.71B USDT');
   });
 
@@ -223,7 +233,16 @@ void main() {
     tester.view.physicalSize = const Size(320, 568);
 
     await pumpMarket(tester);
-    await tester.scrollUntilVisible(find.byType(MarketSortMenu), 100);
+    await tester.scrollUntilVisible(
+      find.byType(MarketSortMenu),
+      100,
+      scrollable: find
+          .descendant(
+            of: find.byType(CustomScrollView),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.byType(MarketSortMenu));
     await tester.pumpAndSettle();

@@ -5,7 +5,8 @@ import 'package:crypto_market_mobile/app/theme/app_colors.dart';
 import 'package:crypto_market_mobile/core/constants/app_strings.dart';
 import 'package:crypto_market_mobile/features/watchlist/presentation/viewmodels/watchlist_view_model.dart';
 
-/// Star that adds [symbol] to, or removes it from, the watchlist.
+/// Modern interactive button that adds [symbol] to, or removes it from, the watchlist.
+/// Features a subtle glass backdrop, amber accent, and status tooltips.
 /// Disabled while the watchlist is loading or unreadable.
 class WatchlistToggleButton extends ConsumerWidget {
   const WatchlistToggleButton({super.key, required this.symbol});
@@ -23,9 +24,31 @@ class WatchlistToggleButton extends ConsumerWidget {
         null => AppStrings.watchlistControlUnavailable,
       },
       isSelected: isSaved ?? false,
-      icon: const Icon(Icons.star_border),
-      selectedIcon: const Icon(Icons.star, color: AppColors.favorite),
       onPressed: isSaved == null ? null : () => _toggle(context, ref),
+      style: IconButton.styleFrom(
+        backgroundColor: isSaved == true
+            ? const Color(0x22FBBF24)
+            : const Color(0x0CFFFFFF),
+        foregroundColor: isSaved == true
+            ? AppColors.favorite
+            : AppColors.outlineStrong,
+        side: BorderSide(
+          color: isSaved == true
+              ? const Color(0x55FBBF24)
+              : const Color(0x18FFFFFF),
+          width: 1,
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.all(7),
+        minimumSize: const Size(36, 36),
+        maximumSize: const Size(40, 40),
+      ),
+      icon: const Icon(Icons.star_outline_rounded, size: 20),
+      selectedIcon: const Icon(
+        Icons.star_rounded,
+        size: 20,
+        color: AppColors.favorite,
+      ),
     );
   }
 

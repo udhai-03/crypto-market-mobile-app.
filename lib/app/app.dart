@@ -14,6 +14,7 @@ class CryptoMarketApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: AppStrings.appName,
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
       routerConfig: router,
     );

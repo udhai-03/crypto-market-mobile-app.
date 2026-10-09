@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:crypto_market_mobile/core/constants/app_strings.dart';
 import 'package:crypto_market_mobile/core/errors/app_exception.dart';
+import 'package:crypto_market_mobile/core/widgets/fade_slide_in.dart';
 import 'package:crypto_market_mobile/features/market/domain/models/market_ticker.dart';
 import 'package:crypto_market_mobile/features/market/presentation/viewmodels/market_view_model.dart';
 import 'package:crypto_market_mobile/features/market/presentation/widgets/market_controls.dart';
@@ -54,6 +55,7 @@ class _MarketScreenState extends ConsumerState<MarketScreen> {
     });
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         bottom: false,
         child: RefreshIndicator(
@@ -77,8 +79,11 @@ class _MarketScreenState extends ConsumerState<MarketScreen> {
   ) {
     return switch (marketState) {
       AsyncValue(:final value?) when value.isNotEmpty => const [
-        SliverToBoxAdapter(child: MarketSummarySection()),
-        SliverToBoxAdapter(child: MarketControls()),
+        SliverToBoxAdapter(child: FadeSlideIn(child: MarketControls())),
+        SliverToBoxAdapter(
+          child: FadeSlideIn(index: 1, child: MarketSummarySection()),
+        ),
+        MarketListHeader(),
         MarketTickerList(),
       ],
       AsyncValue(hasValue: true, isLoading: false) => [

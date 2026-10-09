@@ -18,11 +18,13 @@ class StatusMessageView extends StatelessWidget {
   final String actionLabel;
   final VoidCallback onAction;
 
-  static const double _iconSize = 48;
+  static const double _iconSize = 32;
+  static const double _haloSize = 72;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final accent = theme.colorScheme.onSurfaceVariant;
     final title = this.title;
 
     return Center(
@@ -31,17 +33,23 @@ class StatusMessageView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: _iconSize,
-              color: theme.colorScheme.onSurfaceVariant,
+            Container(
+              width: _haloSize,
+              height: _haloSize,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: theme.colorScheme.surfaceContainerHigh,
+              ),
+              child: Icon(icon, size: _iconSize, color: accent),
             ),
-            const SizedBox(height: AppSpacing.medium),
+            const SizedBox(height: AppSpacing.screen),
             if (title != null) ...[
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.titleMedium,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               const SizedBox(height: AppSpacing.small),
             ],

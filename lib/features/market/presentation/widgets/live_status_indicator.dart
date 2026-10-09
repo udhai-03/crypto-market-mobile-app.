@@ -15,7 +15,8 @@ class LiveStatusIndicator extends ConsumerWidget {
   const LiveStatusIndicator({super.key});
 
   static const double _backgroundAlpha = 0.14;
-  static const double _dotSize = 8;
+  static const double _dotSize = 6;
+  static const Duration _transition = Duration(milliseconds: 300);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,40 +45,41 @@ class LiveStatusIndicator extends ConsumerWidget {
       ),
     };
 
+    final duration = MediaQuery.disableAnimationsOf(context)
+        ? Duration.zero
+        : _transition;
+
     return Semantics(
       label: AppStrings.liveStatusSemantics(label),
       liveRegion: true,
       child: ExcludeSemantics(
-        child: DecoratedBox(
+        child: AnimatedContainer(
+          duration: duration,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.small + 2,
+            vertical: AppSpacing.xSmall,
+          ),
           decoration: BoxDecoration(
             color: color.withValues(alpha: _backgroundAlpha),
             borderRadius: BorderRadius.circular(AppRadius.pill),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.small,
-              vertical: AppSpacing.xSmall,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox.square(
-                  dimension: _dotSize,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.small),
-                Text(
-                  label,
-                  style: Theme.of(context).textTheme.labelMedium
-                      ?.copyWith(color: color),
-                ),
-              ],
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedContainer(
+                duration: duration,
+                width: _dotSize,
+                height: _dotSize,
+                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+              ),
+              const SizedBox(width: AppSpacing.small),
+              AnimatedDefaultTextStyle(
+                duration: duration,
+                style: Theme.of(context).textTheme.labelMedium!
+                    .copyWith(color: color, fontWeight: FontWeight.w600),
+                child: Text(label),
+              ),
+            ],
           ),
         ),
       ),

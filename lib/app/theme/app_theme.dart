@@ -48,6 +48,7 @@ abstract final class AppTheme {
         scrolledUnderElevation: 0,
         centerTitle: false,
       ),
+      dividerTheme: const DividerThemeData(color: AppColors.hairline),
       cardTheme: CardThemeData(
         color: AppColors.surface,
         elevation: 0,
@@ -56,17 +57,59 @@ abstract final class AppTheme {
       ),
       inputDecorationTheme: InputDecorationThemeData(
         filled: true,
-        fillColor: AppColors.surfaceHigh,
+        fillColor: AppColors.glassFill,
         border: inputBorder,
-        enabledBorder: inputBorder,
+        enabledBorder: inputBorder.copyWith(
+          borderSide: const BorderSide(color: AppColors.glassBorder),
+        ),
         focusedBorder: inputBorder.copyWith(
           borderSide: const BorderSide(color: AppColors.primary),
         ),
         hintStyle: const TextStyle(color: AppColors.textSecondary),
       ),
-      navigationBarTheme: const NavigationBarThemeData(
-        backgroundColor: AppColors.surface,
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: Colors.transparent,
+        height: 68,
         indicatorColor: AppColors.navIndicator,
+        indicatorShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: Color(0x385EEAD4), width: 1.2),
+        ),
+        iconTheme: WidgetStateProperty.resolveWith(
+          (states) => IconThemeData(
+            color: states.contains(WidgetState.selected)
+                ? AppColors.primary
+                : AppColors.textSecondary,
+          ),
+        ),
+        labelTextStyle: WidgetStateProperty.resolveWith(
+          (states) => TextStyle(
+            fontSize: 12,
+            fontWeight: states.contains(WidgetState.selected)
+                ? FontWeight.w700
+                : FontWeight.w500,
+            color: states.contains(WidgetState.selected)
+                ? AppColors.primary
+                : AppColors.textSecondary,
+          ),
+        ),
+      ),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          side: const WidgetStatePropertyAll(
+            BorderSide(color: AppColors.outline),
+          ),
+          backgroundColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? AppColors.navIndicator
+                : AppColors.surface,
+          ),
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? AppColors.primary
+                : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
